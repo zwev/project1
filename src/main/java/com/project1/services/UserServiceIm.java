@@ -3,6 +3,7 @@ package com.project1.services;
 import com.project1.controller.UserController;
 import com.project1.dao.UserDAO;
 import com.project1.exceptions.UserNotFoundException;
+import com.project1.model.Cart;
 import com.project1.model.User;
 import com.project1.util.UserCheck;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class UserServiceIm implements UserService{
     UserCheck userCheck;
     @Autowired
     private HttpServletRequest req;
+    @Autowired
+    Cart cart;
 
     @Override
     public boolean isUser(int userId) {
@@ -78,6 +81,7 @@ public class UserServiceIm implements UserService{
             oldUser.setUserName(newUser.getUserName());
             oldUser.setCountry(newUser.getCountry());
             oldUser.setEmail(newUser.getEmail());
+            oldUser.setCart(newUser.getCart());
             userDAO.save(oldUser);
             return true;
         }
