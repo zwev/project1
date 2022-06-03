@@ -10,9 +10,8 @@ import java.util.Optional;
 public interface UserDAO extends JpaRepository<User, Integer> {
     @Query("select count(p) = 1 from User p where email = ?1 and userName = ?2")
     public boolean userExist(String email, String userName);
-    @Query("select u from User u where email like ?1%")
+    @Query("select u from User u where email = ?1")
     List<User> getUserByEmail(String email);
-
     public Optional<User> findByUserName(String username);
 
 }

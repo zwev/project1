@@ -23,6 +23,5 @@ public interface UserService {
     public void logout();
     public User login(String username, String password);
 
-
-
+    boolean updateUserCart(User user, int id);
 }

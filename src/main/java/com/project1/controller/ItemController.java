@@ -1,7 +1,10 @@
 package com.project1.controller;
 
+import com.project1.annotations.Authorized;
 import com.project1.dao.ItemDAO;
 import com.project1.model.Item;
+import com.project1.model.Role;
+import com.project1.services.AuthorizationService;
 import com.project1.services.ItemService;
 import com.project1.util.NegCheck;
 import org.slf4j.Logger;
@@ -32,6 +35,8 @@ public class ItemController {
     //GenerateRandomNumber randomNumber;
     @Autowired()
     NegCheck negCheck;
+    @Autowired()
+    AuthorizationService authorizationService;
 
 
     public ItemController(){
@@ -47,7 +52,7 @@ public class ItemController {
     }
     @GetMapping("/home")
     public String home(){
-        return "Welcome to the BuhhStore!! Please enter your credentials";
+        return "Welcome to the the store demo.\nFor queries related to users, navigate to the users page.";
     }
     @GetMapping("{PiD}")
     public ResponseEntity<Item> getProduct(@PathVariable("PiD")int itemId){
@@ -119,8 +124,10 @@ public class ItemController {
         }
         return responseEntity;
     }
+    @Authorized(allowedRoles = {Role.ADMIN})
     @PostMapping("/add")                   //Post
     public ResponseEntity<String> addProduct(@RequestBody Item item){
+        //authorizationService.guardByUserId();
         boolean result = itemService.addItem(item);
         LOGGER.info("Info - Attempting to write to DB");
         ResponseEntity responseEntity = null;

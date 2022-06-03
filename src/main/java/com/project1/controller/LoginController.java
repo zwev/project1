@@ -26,8 +26,6 @@ public class LoginController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
         userService.logout();
-
         return ResponseEntity.accepted().build();
     }
-
 }

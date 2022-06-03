@@ -8,6 +8,5 @@ public class UserCheck {
     public boolean usercheck(String userName, String email){
         //if()
         return true;
-
     }
 }

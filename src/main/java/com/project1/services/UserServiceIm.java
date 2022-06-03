@@ -94,29 +94,31 @@ public class UserServiceIm implements UserService{
     public User login(String userName, String password) {
         User exists = userDAO.findByUserName(userName)
                 .orElseThrow(() -> new UserNotFoundException(String.format("No User with username = %s", userName)));
-        // Maybe change the above exception to instead be a UnsuccessfulLoginException
-
-        // Check that the given password matches the password in the User object
-        // Pretend that they were successful
-
-
         HttpSession session = req.getSession();
         session.setAttribute("currentUser", exists);
-
         return exists;
     }
 
-    public void logout() {
-
-        HttpSession session = req.getSession(false);
-
-        if(session == null) {
-            // No one was logged in
-
-            return;
+    @Override
+    public boolean updateUserCart(User newUser, int id) {
+        User oldUser = userDAO.getReferenceById(id);
+        if(userDAO.existsById(id)){
+            log.info("updating cart info for user: "+oldUser.getUserName());
+            oldUser.setCart(newUser.getCart());
+            userDAO.save(oldUser);
+            return true;
         }
-
-        session.invalidate();
+        else{
+            log.info("cannot update user");
+            return false;
+        }
     }
 
+    public void logout() {
+        HttpSession session = req.getSession(false);
+        if(session == null) {
+            return;
+        }
+        session.invalidate();
+    }
 }

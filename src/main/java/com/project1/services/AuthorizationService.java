@@ -28,4 +28,18 @@ public class AuthorizationService {
             }
         }
     }
+
+    public void custguardByUserId(int userId) {
+        HttpSession session = req.getSession(false);
+        if(session == null || session.getAttribute("currentUser") == null) {
+            throw new NotLoggedInException("Must be logged in to perform this action");
+        }
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        if(userId != currentUser.getId()) {
+            if(currentUser.getRole() != Role.CUSTOMER) {
+                throw new NotAuthorizedException("only customers can order things.");
+            }
+        }
+    }
 }

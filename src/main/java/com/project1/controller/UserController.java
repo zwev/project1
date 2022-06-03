@@ -3,6 +3,7 @@ package com.project1.controller;
 
 import com.project1.dao.UserDAO;
 import com.project1.model.User;
+import com.project1.services.AuthorizationService;
 import com.project1.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,12 @@ public class UserController {
     UserDAO userDAO;
     @Autowired()
     User user;
+    @Autowired()
+    AuthorizationService authorizationService;
+    @GetMapping("/home")
+    public String home(){
+        return "Welcome to the the store demo.\nFor queries related to items, navigate to the items page.";
+    }
     @PostMapping("/register")
     public ResponseEntity<User> addUser(@RequestBody User user){
         boolean result = userService.addUser(user);
@@ -49,6 +56,22 @@ public class UserController {
         }
         return responseEntity;
     }
+
+    @GetMapping("/cart/{email}")
+    public ResponseEntity<User> getCart(@PathVariable("email") String email){
+        List<User> result = new ArrayList<>();
+        ResponseEntity responseEntity = null;
+        if(userService.getUserByEmail(email).size()>0){
+            result = userService.getUserByEmail(email);
+            responseEntity = new ResponseEntity<String>("Found cart for user "+result.get(0).getUserName().toString()+"\n"+result.get(0).getCart(), HttpStatus.OK);
+        }
+        else{
+            responseEntity = new ResponseEntity<String>
+                    ("Cannot find user, please try again" + userService.getUserByEmail(email).size(), HttpStatus.NOT_ACCEPTABLE);
+        }
+        return responseEntity;
+    }
+
     @PutMapping("/update/{Id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("Id") int Id){
         boolean result = userService.updateUser(user, Id);
@@ -63,6 +86,22 @@ public class UserController {
         }
         return responseEntity;
     }
+
+    @PutMapping("/updatecart/{Id}")
+    public ResponseEntity<User> updateUserCart(@RequestBody User user, @PathVariable("Id") int Id){
+        boolean result = userService.updateUserCart(user, Id);
+        ResponseEntity responseEntity = null;
+        if(result){
+            responseEntity = new ResponseEntity<String>
+                    ("Cart for user number "+Id+" updated successfully", HttpStatus.OK);
+        }
+        else{
+            responseEntity = new ResponseEntity<String>
+                    ("Cannot update user, please try again", HttpStatus.NOT_ACCEPTABLE);
+        }
+        return responseEntity;
+    }
+
     @DeleteMapping("/delete/{Id}")
     public ResponseEntity<String> deleteUser(@PathVariable("Id") int Id){
         boolean result = userService.deleteUser(Id);

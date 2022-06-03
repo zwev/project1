@@ -25,5 +25,4 @@ public class Cart implements Serializable {
             joinColumns = @JoinColumn(name = "cartId", referencedColumnName = "cartId"),
             inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "itemId"))
     private List<Item> itemList;
-
 }
