@@ -87,7 +87,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>project1build</finalName>
+		<finalName>project1buildlocal</finalName>
 	</build>
 
 </project>

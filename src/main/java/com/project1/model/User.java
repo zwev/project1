@@ -30,7 +30,6 @@ public class User implements Serializable{
     @JoinColumn(name="cartId", referencedColumnName = "cartId")
     private Cart cart = new Cart();
 
-
     //@OneToMany(mappedBy = "user")
     //@OrderBy("number")
     //public List<Cart> getItems() { return items; }
